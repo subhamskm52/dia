@@ -4,18 +4,6 @@ use crate::scanner::token_type::TokenType;
 
 pub mod token_type;
 pub mod token;
-//
-// Method	Purpose
-// advance()	Consume and return the next character
-// is_eof()	Check if we’ve reached the end of source
-// peek()	Look at the current char without consuming it
-// peek_next()	Look ahead one more character
-// add_token()	Push a new token to the tokens list
-// match_char()	Conditionally consume the next char if it matches
-// string()	Handle string literals
-// number()	Handle numeric literals
-// identifier()	Handle variable names and keywords
-
 
 pub struct Scanner {
     source: String,
@@ -51,6 +39,7 @@ impl Scanner {
 
         let c = self.advance();
         match c {
+
             '(' => self.add_token(TokenType::LeftParen),
             ')' => self.add_token(TokenType::RightParen),
             '{' => self.add_token(TokenType::LeftBrace),
@@ -61,15 +50,58 @@ impl Scanner {
             '+' => self.add_token(TokenType::Plus),
             ';' => self.add_token(TokenType::Semicolon),
             '*' => self.add_token(TokenType::Star),
+
+        // equality and comparison operators
+            '!' => {
+                if self.peek() == '=' {
+                    self.advance(); // consume '='
+                    self.add_token(TokenType::BangEqual); // !=
+                } else {
+                    self.add_token(TokenType::Bang); // !
+                }
+            }
+            '=' => {
+                if self.peek() == '=' {
+                    self.advance(); // consume '='
+                    self.add_token(TokenType::EqualEqual); // ==
+                } else {
+                    self.add_token(TokenType::Equal); // =
+                }
+            }
+            '<' => {
+                if self.peek() == '=' {
+                    self.advance(); // <=
+                    self.add_token(TokenType::LessEqual);
+                } else {
+                    self.add_token(TokenType::Less); // <
+                }
+            }
+            '>' => {
+                if self.peek() == '=' {
+                    self.advance(); // >=
+                    self.add_token(TokenType::GreaterEqual);
+                } else {
+                    self.add_token(TokenType::Greater); // >
+                }
+            }
+
+
+        //  WhiteSpaces
             ' ' | '\r' | '\t' => {},
             '\n' => self.line += 1,
+
+        //  Alphanumeric, eg: identifier & keywords
             c if c.is_alphanumeric() || c == '_' => self.identifier(),
+
+        //  Numbers
             c if c.is_ascii_digit() => self.number(),
-            _ => { println!("Unexpected character '{}' at line {}", c, self.line )}
+
+        //  unexpected token
+            _ => { println!("Unexpected character '{}' at line {}, pos {}", c, self.line, self.current ); }
         }
     }
     fn number(&mut self){
-        while( self.peek().is_ascii_digit()){
+        while(self.peek().is_ascii_digit()){
             self.advance();
         }
         let number = &self.source[self.start..self.current];
