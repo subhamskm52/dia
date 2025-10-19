@@ -134,6 +134,14 @@ impl Scanner {
         while(self.peek().is_ascii_digit()){
             self.advance();
         }
+        if(self.peek() == '.' && self.peek_next().is_ascii_digit()){
+            while(self.peek().is_ascii_digit()){
+                self.advance();
+            }
+        }
+        else{
+            println!("Unexpected digit '{}' at line {}, character {}", self.peek(), self.line, self.current );
+        }
         self.add_token(TokenType::Number);
     }
     fn identifier(&mut self) {
@@ -166,8 +174,13 @@ impl Scanner {
 
     }
 
+    // ***************************** helper functions **************************
     fn peek(&self)-> char {
         self.source.chars().nth(self.current).unwrap_or('\0')
+    }
+
+    fn peek_next(&self)-> char {
+        self.source.chars().nth(self.current+1).unwrap_or('\0')
     }
     fn is_eof(&self) -> bool {
         self.current >= self.source.len()
