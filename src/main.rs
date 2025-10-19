@@ -4,7 +4,8 @@ mod scanner;
 
 fn main() {
     let source = String::from("
-        var x = 10;
+        var x = 10.8;
+        var name = \"subham\"
         print x + 5;
         if (x > 5) {
             print true;
