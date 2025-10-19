@@ -34,6 +34,9 @@ impl Scanner {
         let text = &self.source[self.start..self.current];
         self.tokens.push(Token::new(token, text.to_string(), self.start, self.current, self.line ));
     }
+    fn add_token_with_lexeme(&mut self, token: TokenType, text: String){
+        self.tokens.push(Token::new(token, text.to_string(), self.start, self.current, self.line ));
+    }
 
     fn scan_token(&mut self){
 
@@ -102,22 +105,36 @@ impl Scanner {
             ' ' | '\r' | '\t' => {},
             '\n' => self.line += 1,
 
-        //  Alphanumeric, eg: identifier & keywords
-            c if c.is_alphanumeric() || c == '_' => self.identifier(),
+        // strings
+            c if c == '"' => self.string(),
 
         //  Numbers
             c if c.is_ascii_digit() => self.number(),
 
+        //  Alphanumeric, eg: identifier & keywords
+            c if c.is_alphanumeric() || c == '_' => self.identifier(),
+
         //  unexpected token
-            _ => { println!("Unexpected character '{}' at line {}, pos {}", c, self.line, self.current ); }
+            _ => { println!("Unexpected character '{}' at line {}, character {}", c, self.line, self.current ); }
         }
+    }
+
+    fn string(&mut self){
+        if(self.peek() != '"' && !self.is_eof()){
+            if(self.peek() == '\n'){self.line += 1;}
+            self.advance();
+        }
+        if(self.is_eof()){
+            println!("Unexpected end of string at line {}, character {}", self.line, self.current );
+        }
+        let str = &self.source[self.start+1 .. self.current-1];
+        self.add_token_with_lexeme(TokenType::String, str.to_string());
     }
     fn number(&mut self){
         while(self.peek().is_ascii_digit()){
             self.advance();
         }
-        let number = &self.source[self.start..self.current];
-        self.tokens.push(Token::new(TokenType::Number, number.to_string(), self.start, self.current, self.line ));
+        self.add_token(TokenType::Number);
     }
     fn identifier(&mut self) {
 
@@ -161,5 +178,4 @@ impl Scanner {
         self.current += ch.len_utf8();
         ch
     }
-
 }
