@@ -51,6 +51,18 @@ impl Scanner {
             ';' => self.add_token(TokenType::Semicolon),
             '*' => self.add_token(TokenType::Star),
 
+        // single line comment and division
+            '/' => {
+                if(self.peek() == '/'){
+                    while self.peek() != '\n' && !self.is_eof(){
+                        self.advance();
+                    }
+                }
+                else{
+                    self.add_token(TokenType::Slash);
+                }
+            }
+
         // equality and comparison operators
             '!' => {
                 if self.peek() == '=' {
