@@ -1,5 +1,5 @@
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum TokenType{
     // Single-character tokens
     LeftParen, RightParen, LeftBrace, RightBrace, Semicolon, Colon,
