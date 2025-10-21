@@ -1,10 +1,21 @@
 use crate::parser::expr::{Expr, LiteralValue};
 use crate::parser::Parser;
+use crate::scanner::token::Token;
 use crate::scanner::token_type::TokenType;
 
 impl Parser {
     pub fn parse_expression(&mut self) -> Expr {
-        self.parse_equality()
+        self.parse_assignment()
+    }
+    fn parse_assignment(&mut self) -> Expr {
+        let expr = self.parse_equality();
+        if(self.match_token(&[TokenType::Equal])){
+            let ident = self.previous().clone();
+            let value = self.parse_expression();
+            return Expr::Assign {identifier: ident, value: Box::new(value), }
+
+        }
+        expr
     }
 
     pub fn parse_equality(&mut self) -> Expr {
@@ -121,7 +132,9 @@ impl Parser {
             self.consume(TokenType::RightParen, "Expect ')' after expression.");
             return Expr::Grouping(Box::new(expr));
         }
-
+        if self.match_token(&[TokenType::Identifier]) {
+            return Expr::Variable(self.previous().clone());
+        }
         self.error(self.peek(), "Expected expression.");
         Expr::Literal(LiteralValue::Nil)
     }

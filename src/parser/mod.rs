@@ -1,5 +1,7 @@
 mod expr;
 mod expression_parser;
+mod stmt;
+mod stmt_parser;
 
 use crate::scanner::token::Token;
 use crate::scanner::token_type::TokenType;
@@ -35,13 +37,13 @@ impl Parser {
         self.tokens.get(self.current + 1).unwrap_or(self.peek())
     }
 
-    pub fn check(&self, expected: &TokenType) -> bool {
+    pub fn check(&self, expected: TokenType) -> bool {
         self.peek().get_type() == expected.clone()
     }
 
     pub fn match_token(&mut self, types: &[TokenType]) -> bool {
         for t in types {
-            if(self.check(t)){
+            if(self.check(t.clone())){
                 self.advance();
                 return true;
             }
@@ -58,7 +60,7 @@ impl Parser {
 
     // Consume expected token or report error
     pub fn consume(&mut self, expected: TokenType, message: &str) -> &Token {
-        if self.check(&expected) {
+        if self.check(expected) {
             return self.advance();
         }
         self.error(self.peek(), message);

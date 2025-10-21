@@ -1,7 +1,8 @@
 // ==========================================
 // Expression Grammar (BNF-style)
 //
-// expression     → equality ;
+// expression     → assignment ;
+// assignment     → equality | IDENTIFIER "=" assignment
 // equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 // comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 // term           → factor ( ( "-" | "+" ) factor )* ;
@@ -10,6 +11,7 @@
 // primary        → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
 // ==========================================
 
+use crate::scanner::token::Token;
 use crate::scanner::token_type::TokenType;
 
 #[derive(Debug, Clone)]
@@ -25,7 +27,11 @@ pub enum LiteralValue {
 pub enum Expr {
     /// A literal value
     Literal(LiteralValue),
-
+    Variable(Token),
+    Assign{
+        identifier: Token,
+        value: Box<Expr>,
+    },
     /// Unary operator expression, e.g., -x or !flag
     Unary {
         operator: TokenType,

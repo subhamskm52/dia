@@ -19,7 +19,7 @@ pub enum TokenType{
     If, Else, For, While,
     And, Or,
     Return, True, False, Nil,
-    Print,
+    Print, Break, Continue,
 
     Eof
 }
