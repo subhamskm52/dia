@@ -10,13 +10,14 @@ fn main() {
         var y = 5;
         var z = 0;
 
-        if (y > 0) {
-            z = z + x * (y - 2);
-        } else {
-            z = z + x + y;
-        }
-        x = x - 1;
-        y = y + 1;
+        while (x > 0) {
+            if (y / 2 == 0) {
+                z = z + x * (y - 2);
+            } else {
+                z = z + x + y;
+            }
+            x = x - 1;
+            y = y + 1;
         print z;
     ");
     let mut scanner = Scanner::new(source);

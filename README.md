@@ -34,6 +34,10 @@ LANGUAGE CORE
 - Interpreter (basic runtime)
     • Tree-walk evaluation skeleton
     • Token and AST structures
+- Parser
+    • Expression parsing (binary, unary, grouping)
+    • Statement parsing (expression, print, block)
+    • Control flow: if / else, while, for loops
 
 🔜 TODO (Next Features)
 -----------------------------------------------------
@@ -41,10 +45,6 @@ LANGUAGE CORE
     • Multi-character operators: == != <= >=
     • String literals: "Hello Mia"
     • Comments: // single-line, /* multi-line */
-- Parser
-    • Expression parsing (binary, unary, grouping)
-    • Statement parsing (expression, print, block)
-    • Control flow: if / else, while, for loops
 - Interpreter
     • Variable environments and scoping
     • Dynamic typing
