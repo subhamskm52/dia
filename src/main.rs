@@ -3,22 +3,12 @@ use crate::scanner::Scanner;
 
 mod scanner;
 mod parser;
+mod interpreter;
 
 fn main() {
     let source = String::from("
         var x = 10;
-        var y = 5;
-        var z = 0;
-
-        while (x > 0) {
-            if (y / 2 == 0) {
-                z = z + x * (y - 2);
-            } else {
-                z = z + x + y;
-            }
-            x = x - 1;
-            y = y + 1;
-        print z;
+        x = x + 10 + 9;
     ");
     let mut scanner = Scanner::new(source);
     scanner.scan_tokens();

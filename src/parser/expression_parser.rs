@@ -9,8 +9,8 @@ impl Parser {
     }
     fn parse_assignment(&mut self) -> Expr {
         let expr = self.parse_equality();
+        let ident = self.previous().clone();
         if(self.match_token(&[TokenType::Equal])){
-            let ident = self.previous().clone();
             let value = self.parse_expression();
             return Expr::Assign {identifier: ident, value: Box::new(value), }
 
