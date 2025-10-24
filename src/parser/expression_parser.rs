@@ -1,6 +1,5 @@
 use crate::parser::expr::{Expr, LiteralValue};
 use crate::parser::Parser;
-use crate::scanner::token::Token;
 use crate::scanner::token_type::TokenType;
 
 impl Parser {
