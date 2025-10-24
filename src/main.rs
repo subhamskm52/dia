@@ -1,24 +1,16 @@
+use crate::interpreter::Interpreter;
 use crate::parser::Parser;
 use crate::scanner::Scanner;
 
 mod scanner;
 mod parser;
+mod interpreter;
 
 fn main() {
     let source = String::from("
-        var x = 10;
-        var y = 5;
-        var z = 0;
-
-        while (x > 0) {
-            if (y / 2 == 0) {
-                z = z + x * (y - 2);
-            } else {
-                z = z + x + y;
-            }
-            x = x - 1;
-            y = y + 1;
-        print z;
+        y = 5;
+        x = 89;
+        x = x + 10 + 9 - y;
     ");
     let mut scanner = Scanner::new(source);
     scanner.scan_tokens();
@@ -32,4 +24,7 @@ fn main() {
 
     // Step 4: Debug print AST
     println!("{:#?}", expression_ast);
+
+    let mut interpreter = Interpreter::new();
+    interpreter.interpret(expression_ast);
 }

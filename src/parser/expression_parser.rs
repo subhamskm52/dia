@@ -1,6 +1,5 @@
 use crate::parser::expr::{Expr, LiteralValue};
 use crate::parser::Parser;
-use crate::scanner::token::Token;
 use crate::scanner::token_type::TokenType;
 
 impl Parser {
@@ -9,8 +8,8 @@ impl Parser {
     }
     fn parse_assignment(&mut self) -> Expr {
         let expr = self.parse_equality();
+        let ident = self.previous().clone();
         if(self.match_token(&[TokenType::Equal])){
-            let ident = self.previous().clone();
             let value = self.parse_expression();
             return Expr::Assign {identifier: ident, value: Box::new(value), }
 
