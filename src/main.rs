@@ -1,3 +1,4 @@
+use crate::interpreter::Interpreter;
 use crate::parser::Parser;
 use crate::scanner::Scanner;
 
@@ -23,4 +24,7 @@ fn main() {
 
     // Step 4: Debug print AST
     println!("{:#?}", expression_ast);
+
+    let mut interpreter = Interpreter::new();
+    interpreter.interpret(expression_ast);
 }
