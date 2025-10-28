@@ -172,7 +172,6 @@ impl Scanner {
             _ => TokenType::Identifier,
         };
         self.add_token(token_type);
-
     }
 
     // ***************************** helper functions **************************

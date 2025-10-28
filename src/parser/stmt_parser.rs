@@ -79,9 +79,29 @@ impl Parser {
         } else if self.match_token(&[TokenType::Continue]) {
             self.parse_continue_statement()
         }
+        else if self.match_token(&[TokenType::Var]) {
+                self.parse_var_declaration()
+        }
         else {
             self.expression_statement()
         }
+    }
+
+    fn parse_var_declaration(&mut self) -> Stmt {
+        let iden = self.consume(TokenType::Identifier, "Expect ';' after variable declaration.").clone();
+        let contains_equal = self.check(TokenType::Equal).clone();
+
+        let stmt  = match contains_equal {
+            true => {
+                self.consume(TokenType::Equal, "Expect '=' after variable declaration.");
+                let expr = self.parse_expression();
+                Stmt::Var {name: iden.clone(), initializer: Some(expr)}
+            }
+            _ => {
+                Stmt::Var {name: iden.clone(), initializer: None}
+            }
+        };
+        stmt
     }
 
     // exprStmt → expression ";" ;

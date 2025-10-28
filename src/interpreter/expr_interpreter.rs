@@ -1,6 +1,5 @@
 use crate::interpreter::Interpreter;
 use crate::parser::expr::{Expr, LiteralValue};
-use crate::parser::expr::LiteralValue::Number;
 use crate::scanner::token_type::TokenType;
 
 impl Interpreter {
@@ -9,14 +8,14 @@ impl Interpreter {
             Expr::Literal(value ) => { value.clone() }
             Expr::Variable(var_token) => {
                 let name = var_token.get_lexeme().to_string();
-                self.env.get(&name).cloned().expect(&format!("Undefined Variable: {:?}", var_token))
+                self.environment.get(&name).expect(&format!("Undefined Variable: {:?}", var_token))
             }
 
             Expr::Assign { identifier, value} => {
                 let identifier = identifier.get_lexeme().to_string();
                 let value = self.evaluate_expression(*value);
-                self.env.insert(identifier.clone(), value);
-                self.env.get(&identifier).cloned().expect(&format!("Undefined variable '{}'", identifier))
+                self.environment.update(identifier.clone(), value);
+                self.environment.get(&identifier).expect(&format!("Undefined variable '{}'", identifier))
             }
 
             Expr::Unary {operator, right} => {

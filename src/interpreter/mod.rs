@@ -1,19 +1,21 @@
 mod expr_interpreter;
+mod environment;
+mod block_interpreter;
 
+use environment::Environment;
 use std::collections::HashMap;
-use crate::parser::expr::LiteralValue;
-use crate::parser::Parser;
+use crate::parser::expr::{Expr, LiteralValue};
 use crate::parser::stmt::Stmt;
 use crate::scanner::token::Token;
 
 pub struct Interpreter{
     variables: Vec<Token>,
-    env: HashMap<String, LiteralValue>,
+    environment: Environment,
 }
 
 impl Interpreter {
     pub fn new() -> Self {
-        Interpreter{variables: vec![], env:HashMap::new()}
+        Interpreter{variables: vec![], environment:Environment::new()}
     }
 
     pub fn is_truthy(&self, value: &LiteralValue) -> bool {
@@ -28,15 +30,31 @@ impl Interpreter {
         for stmt in stmts {
             self.evaluate(stmt);
         }
-        println!("{:?}", self.env)
+        println!("{:?}", self.environment)
     }
 
     pub fn evaluate(&mut self, stmt: Stmt) {
         match stmt {
             Stmt::Expression(expr) => {
-                let val = self.evaluate_expression(expr);
+                self.evaluate_expression(expr);
+            }
+            Stmt::Block{ stmts}  => {
+                self.evaluate_block(stmts);
+            }
+            Stmt::Var {name, initializer} => {
+                self.evaluate_var(name, initializer);
             }
             _ => {}
         }
+    }
+
+    fn evaluate_var(&mut self, name:Token, initializer:Option<Expr>) {
+        let val = match  initializer {
+            Some(expr) => self.evaluate_expression(expr),
+            _ => LiteralValue::Nil
+
+        };
+        self.environment.set(name.get_lexeme().clone(),val)
+
     }
 }

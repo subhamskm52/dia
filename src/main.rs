@@ -8,9 +8,13 @@ mod interpreter;
 
 fn main() {
     let source = String::from("
-        y = 5;
-        x = 89;
-        x = x + 10 + 9 - y;
+        var y = 5;
+        var x = 80;
+        {
+            var x = 20;
+            y = x + y;
+        }
+        x =  x + y;
     ");
     let mut scanner = Scanner::new(source);
     scanner.scan_tokens();
