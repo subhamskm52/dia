@@ -49,6 +49,10 @@ impl Interpreter {
     }
 
     fn evaluate_var(&mut self, name:Token, initializer:Option<Expr>) {
+        let lex = name.get_lexeme();
+        if(self.environment.contains_in_current_scope(&lex)){
+            panic!("Variable `{}` already defined in the current scope", lex);
+        }
         let val = match  initializer {
             Some(expr) => self.evaluate_expression(expr),
             _ => LiteralValue::Nil

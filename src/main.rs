@@ -10,6 +10,7 @@ fn main() {
     let source = String::from("
         var y = 5;
         var x = 80;
+        var x = 20;
         {
             var x = 20;
             y = x + y;

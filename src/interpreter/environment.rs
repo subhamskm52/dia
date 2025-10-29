@@ -31,6 +31,13 @@ impl Environment{
             }
         }
     }
+    pub fn contains_in_current_scope(&mut self, name: &str) -> bool {
+        if let Some(scope) = self.scopes.last() {
+            scope.contains_key(name)
+        } else {
+            false
+        }    
+    }
 
     pub fn push_scope(&mut self) {
         self.scopes.push(HashMap::new());
