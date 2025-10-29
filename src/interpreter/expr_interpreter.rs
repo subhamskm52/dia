@@ -67,6 +67,26 @@ impl Interpreter {
                         (LiteralValue::Nil, LiteralValue::Nil) => LiteralValue::Bool(false),
                         _ => LiteralValue::Bool(true),
                     },
+                    TokenType::GreaterEqual => match (left_val, right_val) {
+                        (LiteralValue::Number(a), LiteralValue::Number(b)) => LiteralValue::Bool(a >= b),
+                        (LiteralValue::Bool(a), LiteralValue::Bool(b)) => LiteralValue::Bool(a >= b),
+                        _ => LiteralValue::Bool(false),
+                    }
+                    TokenType::Greater => match (left_val, right_val) {
+                        (LiteralValue::Number(a), LiteralValue::Number(b)) => LiteralValue::Bool(a > b),
+                        (LiteralValue::Bool(a), LiteralValue::Bool(b)) => LiteralValue::Bool(a > b),
+                        _ => LiteralValue::Bool(false),
+                    }
+                    TokenType::LessEqual => match (left_val, right_val) {
+                        (LiteralValue::Number(a), LiteralValue::Number(b)) => LiteralValue::Bool(a <= b),
+                        (LiteralValue::Bool(a), LiteralValue::Bool(b)) => LiteralValue::Bool(a <= b),
+                        _ => LiteralValue::Bool(false),
+                    }
+                    TokenType::Less => match (left_val, right_val) {
+                        (LiteralValue::Number(a), LiteralValue::Number(b)) => LiteralValue::Bool(a < b),
+                        (LiteralValue::Bool(a), LiteralValue::Bool(b)) => LiteralValue::Bool(a < b),
+                        _ => LiteralValue::Bool(false),
+                    }
                     _ => panic!("Unsupported binary operator"),
                 };
                 result

@@ -10,10 +10,12 @@ fn main() {
     let source = String::from("
         var y = 5;
         var x = 80;
-        var x = 20;
-        {
+        if( x < y ) {
             var x = 20;
             y = x + y;
+        }
+        else {
+          x=0;
         }
         x =  x + y;
     ");

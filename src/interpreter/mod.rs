@@ -1,6 +1,7 @@
 mod expr_interpreter;
 mod environment;
 mod block_interpreter;
+mod stmt_interpreter;
 
 use environment::Environment;
 use std::collections::HashMap;
@@ -43,6 +44,9 @@ impl Interpreter {
             }
             Stmt::Var {name, initializer} => {
                 self.evaluate_var(name, initializer);
+            }
+            Stmt::If {condition, then_branch, else_branch} => {
+                self.evaluate_if_stmt(&condition, then_branch, else_branch);
             }
             _ => {}
         }
