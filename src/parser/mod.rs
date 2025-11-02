@@ -1,6 +1,6 @@
-mod expr;
+pub mod expr;
 mod expression_parser;
-mod stmt;
+pub mod stmt;
 mod stmt_parser;
 
 use crate::scanner::token::Token;
